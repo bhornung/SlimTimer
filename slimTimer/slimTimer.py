@@ -41,73 +41,74 @@ class SlimTimer():
           verbosity (int) : output verbosity level
         """
 
-# add function
+        # add function
         if not callable(func):
-          raise ValueError("func must be callable")
+            raise ValueError("func must be callable")
         else:
-          self.set_func(func)
+            self.set_func(func)
 
-# set number of runs
+        # set number of runs
         self._set_n_runs(n_runs)
 
-# set function arguments
-        self._func_args = None
-        self._func_kwargs = None
+        # set function arguments
+        self._func_args = []
+        self._func_kwargs = {}
 
-# initialise timer
+        # initialise timer
         self._set_runtimes()
         self.__hasrun = False
 
-# add tag
+        # add tag
         if tag == "":
-          self.tag = func.__name__
+            self.tag = func.__name__
         else:
-          self.tag = str(tag)
+            self.tag = str(tag)
 
         self.verbosity = verbosity
 
     @property
     def run_times(self):
-      """
-      np.ndarray of type np.float to store the run times.
-      """
-      if self.__hasrun:
-        return self._run_times
-      else:
-        raise ValueError("Cannot report unmesured times.")
+        """
+        np.ndarray of type np.float to store the run times.
+        """
+        if self.__hasrun:
+            return self._run_times
+        else:
+            raise ValueError("Cannot report unmeasured times.")
 
     @property 
     def tmean(self):
-      if self.__hasrun:
-        return self._tmean
-      else:
-        raise ValueError("Cannot report unmesured times.")
+        if self.__hasrun:
+            return self._tmean
+        else:
+            raise ValueError("Cannot report unmeasured times.")
 
     @property
     def tstdev(self): 
-      if self.__hasrun:
-        return self._tstdev
-      else:
-        raise ValueError("Cannot report unmesured times.")
+        if self.__hasrun:
+            return self._tstdev
+        else:
+            raise ValueError("Cannot report unmeasured times.")
 
     def measure(self):
         """
         Performs n_runs runs. Calculates the mean run time and its standard deviation.
         """
-# --- perform repeated runs
+        # --- perform repeated runs
         for i_run in range(self.n_runs):
-          if self.verbosity > 0:
-            print("Run {0} / {1} ...".format(i_run, self.n_runs), end = '')
-          tdelta = self._timed_execute()
-          self._run_times[i_run] = tdelta
-          if self.verbosity == 2:
-            print(tdelta)
-
-# calculate mean
+            if self.verbosity > 0:
+                print("Run {0} / {1} ...".format(i_run, self.n_runs), end = '')
+            tdelta = self._timed_execute()
+            self._run_times[i_run] = tdelta
+			
+            if self.verbosity == 2:
+                print(tdelta)
+            
+        # calculate mean
         self._tmean = np.mean(self._run_times)
-# calculate standard deviation
+        # calculate standard deviation
         self._tstdev = np.std(self._run_times)
-# allow acces to results
+        # allow access to results
         self.__hasrun = True
 
     def set_func_args(self, *args, **kwargs):
@@ -132,7 +133,7 @@ class SlimTimer():
       """
       Returns the individual, mean and error of the timings as a dictionary.
       Parameters:
-        with_tag (Bool) : tag the dictionary with the timer's tag. Default False.
+        with_tag (bool) : tag the dictionary with the timer's tag. Default False.
       """
 
       res_dict = {'runtimes' : self.run_times,
@@ -140,33 +141,33 @@ class SlimTimer():
                   'tstdev' : self.tstdev}
 
       if with_tag:
-        res_dict = {"{0}_{1}".format(self.tag, _k) : _v for _k, _v in res_dict.items()}
+          res_dict = {"{0}_{1}".format(self.tag, _k) : _v for _k, _v in res_dict.items()}
 
       return res_dict
 
     def _set_n_runs(self, n_runs):
-      """
-      Sets the number of runs.
-      Parameters:
-        n_runs (int) : number of runs
-      """
-      if not isinstance(n_runs, int) or n_runs < 1:
-        raise ValueError("'n_runs' must be a positive integer.")
-
-      self.n_runs = n_runs
-# reset measurement results
-      self._set_runtimes()
-      self._tmean = np.nan
-      self._tstdev = np.nan
-# block acces to results
-      self.__hasrun = False
+        """
+        Sets the number of runs.
+        Parameters:
+          n_runs (int) : number of runs
+        """
+        if not isinstance(n_runs, int) or n_runs < 1:
+            raise ValueError("'n_runs' must be a positive integer.")
+        
+        self.n_runs = n_runs
+        # reset measurement results
+        self._set_runtimes()
+        self._tmean = np.nan
+        self._tstdev = np.nan
+        # block access to results
+        self.__hasrun = False
 
     def _set_runtimes(self):
-      """
-      Sets the array to store the run times.
-      """
-      self._run_times =np.zeros(self.n_runs, dtype = np.float)
-
+        """
+        Sets the array to store the run times.
+        """
+        self._run_times =np.zeros(self.n_runs, dtype = np.float)
+        
     def _timed_execute(self):
         """
         Executes the function once.
@@ -174,7 +175,7 @@ class SlimTimer():
           tdelta (float) : time needed to execute the function.
         """
         tstart = time.perf_counter()
-        self._func(*self._func_args, **self._func_kw_args)
+        self._func(*self._func_args, **self._func_kwargs)
         tend = time.perf_counter() 
 
         tdelta = tend - tstart
