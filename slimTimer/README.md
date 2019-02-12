@@ -38,18 +38,27 @@ Creates an instance of the timer.
 Parameters:
 
    **func (callable)** : function to time
+   
    **n_runs (int)** : number of runs with a set of parameters. Default: 10
+   
    **tag (str)** : string to tag the timer. Default: "".
+   
    **verbosity (int)** : output verbosity level. Levels: [0, 1, 2]. Deafult: 0.
 
 ### Attributes
 
   **func (callable)** : function to time
+  
   **n_runs (int)** : number of runs with a set of parameters.
+  
   **tag (str)** : string to tag the timer
+  
   **verbosity (int)** : output verbosity level
+  
   **runtimes (np.ndarray)** : list of run times
+  
   **tmean (float)** : mean run time
+  
   **tstdev (float)** : standard deviation of run times
 
 ### Methods
@@ -66,6 +75,7 @@ Sets the function arguments. Make sure *args are passed in the right order.
 Parameters
 
   **args** (iterable) : function positional arguments
+  
   **kwargs** (dict) : function keyword arguments
 
 
