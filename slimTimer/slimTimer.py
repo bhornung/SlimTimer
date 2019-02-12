@@ -21,8 +21,6 @@ class SlimTimer():
 
       set_func_args(*args, **kwargs) : sets the function arguments. Make sure *args are passed in the right order.
 
-      set_func(func) : sets the function to be measured.
-
       to_dict(with_tag = False) : export the public attributes to a dict. 
         Parameters:
           with_tag (bool) : add tag to dict keys. Default False.
@@ -45,7 +43,7 @@ class SlimTimer():
         if not callable(func):
             raise ValueError("func must be callable")
         else:
-            self.set_func(func)
+            self._set_func(func)
 
         # set number of runs
         self._set_n_runs(n_runs)
@@ -118,7 +116,7 @@ class SlimTimer():
         self._func_args = args 
         self._func_kw_args = kwargs
 
-    def set_func(self, func):
+    def _set_func(self, func):
         """
         Sets the function to be timed.
         Parameters:
